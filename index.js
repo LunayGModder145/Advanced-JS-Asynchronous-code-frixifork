@@ -97,7 +97,26 @@ function getAndPrintGitHubUserProfile(username) {
 getAndPrintGitHubUserProfile("octocat").then(html => console.log(html));
 
 //8.- Manipulación del DOM: Crea un input de tipo texto, y un botón buscar. El usuario escribirá en el input el nombre de usuario de GitHub que quiera buscar. Después llamaremos a la función **getAndPrintGitHubUserProfile(username)** que se ejecute cuando se pulse el botón buscar.(Esto no se testea).
+document.addEventListener("DOMContentLoaded", () => {
+    const input = document.getElementById("userInput");
+    const button = document.getElementById("searchBtn");
+    const container = document.getElementById("profileContainer");
 
+    button.addEventListener("click", () => {
+        const username = input.value.trim();
+        
+        if (!username) return; // Si está vacío, no hacemos nada
+
+        getAndPrintGitHubUserProfile(username)
+            .then(htmlCard => {
+                container.innerHTML = htmlCard;
+            })
+            .catch(error => {
+                container.innerHTML = `<p style="color: red;">Usuario no encontrado o error en la API</p>`;
+                console.error(error);
+            });
+    });
+});
 
 /* 9.- Dada una lista de usuarios de github guardada en una array,crea una funcion **fetchGithubUsers(userNames)** que utilice 'https://api.github.com/users/${name}' para obtener el nombre de cada usuario. \
 Objetivo: Usar Promise.all()\
